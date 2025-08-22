@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.11"]
@@ -23,8 +23,8 @@ jobs:
 
     - name: Analyzing the code with pylint
       run: |
-        pylint --rcfile=.pylintrc src
+        pylint --rcfile=.pylintrc itk_dev_event_log
 
     - name: Analyzing the code with flake8
       run: |
-        flake8 --extend-ignore=E501,E251 src
+        flake8 --extend-ignore=E501,E251 itk_dev_event_log
