@@ -1,9 +1,10 @@
+"""This module allows event logging to a MSSQL-database."""
 
 import pyodbc
 
 
 TABLE_NAME = "itk_dev_event_log"
-_connection_string = None
+_connection_string = None  # pylint: disable=invalid-name
 
 
 def setup_logging(connection_string: str):
@@ -14,7 +15,7 @@ def setup_logging(connection_string: str):
         connection_string: The ODBC connection string to the database.
     """
     _ensure_table_exists(connection_string)
-    global _connection_string
+    global _connection_string  # pylint: disable=global-statement
     _connection_string = connection_string
 
 
@@ -30,8 +31,8 @@ def _ensure_table_exists(conn_str: str):
 
         # Check if table exists
         cursor.execute("""
-            SELECT COUNT(*) 
-            FROM INFORMATION_SCHEMA.TABLES 
+            SELECT COUNT(*)
+            FROM INFORMATION_SCHEMA.TABLES
             WHERE TABLE_NAME = ?
         """, (TABLE_NAME,))
 
@@ -40,10 +41,10 @@ def _ensure_table_exists(conn_str: str):
         if exists == 0:
             create_stmt = f"""
             CREATE TABLE [dbo].[{TABLE_NAME}] (
-	            [process_name] [varchar](50) NOT NULL,
-	            [timestamp] [datetime2](7) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	            [message] [varchar](100) NOT NULL,
-	            [count] [int] NOT NULL
+                [process_name] [varchar](50) NOT NULL,
+                [timestamp] [datetime2](7) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                [message] [varchar](100) NOT NULL,
+                [count] [int] NOT NULL
             );
             """
             cursor.execute(create_stmt)
